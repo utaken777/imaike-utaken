@@ -1,272 +1,95 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>うたけん - カラオケバー今池 | インフォグラフィック</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Roboto:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: #1a202c;
-            color: #e2e8f0;
-        }
-        .font-roboto {
-            font-family: 'Roboto', sans-serif;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 320px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .gradient-text {
-            background: linear-gradient(to right, #a78bfa, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
-        }
-        .flow-arrow::after {
-            content: '→';
-            font-size: 2rem;
-            color: #ec4899;
-            margin: 0 1rem;
-        }
-        .icon-bg {
-            background-color: rgba(236, 72, 153, 0.1);
-        }
-    </style>
-</head>
-<body class="antialiased">
-
-    <!-- 
-      Infographic Plan:
-      1. Hero: Main concept and hook.
-      2. The Experience: Duality of "At-home" vs "Luxury".
-      3. The Community: Visualize target audience with a Donut Chart.
-      4. Core Values: Visualize "As-Is to To-Be" with a custom HTML/CSS flow diagram.
-      5. Key Features: Highlight unique points with icons.
-      6. Footer: Location and info.
-
-      Visualization Choices:
-      - Target Audience: Goal: Compare -> Donut Chart (Chart.js/Canvas). Justification: Ideal for showing parts of a whole composition.
-      - Core Values: Goal: Organize -> Custom Flow Diagram (HTML/CSS). Justification: Directly visualizes the evolution from 'fact' to 'ideal' without SVG/Mermaid.
-      - Key Features: Goal: Inform -> Icon List (HTML/CSS + Unicode). Justification: Clean, simple way to present key selling points.
-      
-      Color Palette Name: "Retro Modern Night"
-      - Background: #1a202c (dark slate)
-      - Text: #e2e8f0 (light slate)
-      - Accent 1 (Purple): #a78bfa
-      - Accent 2 (Pink): #ec4899
-      
-      Confirmation: NEITHER Mermaid JS NOR SVG were used in this file.
-    -->
-
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
-
-        <header class="text-center my-12">
-            <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-4">うたけん</h1>
-            <p class="text-xl md:text-2xl font-bold text-slate-300">今池の地下に潜む、音楽好きの隠れ家。</p>
-            <p class="text-lg text-slate-400 mt-2">レトロな夜に、最新の音を。</p>
-        </header>
-
-        <main>
-            <section id="experience" class="my-16">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">ふたつの顔を持つ空間</h2>
-                    <p class="text-slate-400">懐かしい温かさと、心昂る上質さ。そのギャップが、うたけんの魅力です。</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
-                    <div class="bg-slate-800 p-8 rounded-xl shadow-lg">
-                        <div class="text-6xl mb-4">🏠</div>
-                        <h3 class="text-2xl font-bold text-pink-400 mb-2">アットホームな一体感</h3>
-                        <p class="text-slate-300">こぢんまりとした空間だからこそ、生まれる一体感。初めて会った人とも、音楽を通じて自然と仲良くなれる。そんな温かい雰囲気がここにあります。</p>
-                    </div>
-                    <div class="bg-slate-800 p-8 rounded-xl shadow-lg">
-                        <div class="text-6xl mb-4">💎</div>
-                        <h3 class="text-2xl font-bold text-purple-400 mb-2">ラグジュアリーな音楽体験</h3>
-                        <p class="text-slate-300">音響、映像、インテリア。すべてにこだわり抜いた最新設備。本物志向のあなたもきっと満足する、上質で贅沢な時間をお約束します。</p>
-                    </div>
-                </div>
-            </section>
-
-            <section id="community" class="my-20">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">音楽で、世代は繋がる</h2>
-                    <p class="text-slate-400">学生から社会人、そして人生のベテランまで。うたけんには、幅広い世代の音楽好きが集います。ここが、あなたの「音楽の交差点」になります。</p>
-                </div>
-                <div class="bg-slate-800 p-6 md:p-8 rounded-xl shadow-lg">
-                    <div class="chart-container">
-                        <canvas id="audienceChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <section id="values" class="my-20">
-                 <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold mb-2">私たちの目指す場所</h2>
-                    <p class="text-slate-400">お店の「今」と「未来」。私たちは、訪れる全ての人にとって最高の場所でありたいと願っています。</p>
-                </div>
-                <div class="space-y-8">
-                    <div class="flex flex-col md:flex-row items-center justify-center">
-                        <div class="bg-slate-800 p-6 rounded-lg text-center md:w-5/12">
-                            <h4 class="font-bold text-purple-400">【事実】</h4>
-                            <p>こぢんまりとしたアットホームな空間</p>
-                        </div>
-                        <div class="flow-arrow hidden md:block"></div>
-                        <div class="md:hidden text-4xl text-pink-500 my-2">↓</div>
-                        <div class="bg-slate-700 p-6 rounded-lg text-center md:w-5/12 border border-pink-500">
-                             <h4 class="font-bold text-pink-400">【理想】</h4>
-                            <p>自然な交流が生まれる一体感のある社交場</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col md:flex-row items-center justify-center">
-                        <div class="bg-slate-800 p-6 rounded-lg text-center md:w-5/12">
-                            <h4 class="font-bold text-purple-400">【事実】</h4>
-                            <p>幅広い世代の客層</p>
-                        </div>
-                        <div class="flow-arrow hidden md:block"></div>
-                        <div class="md:hidden text-4xl text-pink-500 my-2">↓</div>
-                         <div class="bg-slate-700 p-6 rounded-lg text-center md:w-5/12 border border-pink-500">
-                             <h4 class="font-bold text-pink-400">【理想】</h4>
-                            <p>音楽という共通言語で誰もが繋がれるコミュニティ</p>
-                        </div>
-                    </div>
-                     <div class="flex flex-col md:flex-row items-center justify-center">
-                        <div class="bg-slate-800 p-6 rounded-lg text-center md:w-5/12">
-                            <h4 class="font-bold text-purple-400">【事実】</h4>
-                            <p>最新の音響・映像・設備</p>
-                        </div>
-                        <div class="flow-arrow hidden md:block"></div>
-                        <div class="md:hidden text-4xl text-pink-500 my-2">↓</div>
-                         <div class="bg-slate-700 p-6 rounded-lg text-center md:w-5/12 border border-pink-500">
-                             <h4 class="font-bold text-pink-400">【理想】</h4>
-                            <p>本物志向の大人も満足する上質な音楽体験</p>
-                        </div>
-                    </div>
-                     <div class="flex flex-col md:flex-row items-center justify-center">
-                        <div class="bg-slate-800 p-6 rounded-lg text-center md:w-5/12">
-                            <h4 class="font-bold text-purple-400">【事実】</h4>
-                            <p>駅直結の地下という立地</p>
-                        </div>
-                        <div class="flow-arrow hidden md:block"></div>
-                        <div class="md:hidden text-4xl text-pink-500 my-2">↓</div>
-                         <div class="bg-slate-700 p-6 rounded-lg text-center md:w-5/12 border border-pink-500">
-                             <h4 class="font-bold text-pink-400">【理想】</h4>
-                            <p>知る人ぞ知る「大人の隠れ家」としての特別感</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="features" class="my-20">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div class="bg-slate-800 p-8 rounded-xl shadow-lg">
-                        <div class="text-6xl mb-4">🎵</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-2">最高の音響</h3>
-                        <p class="text-slate-300">プロ仕様の機材で、あなたの歌声を最大限に引き出します。まるでライブステージのような没入感を。</p>
-                    </div>
-                    <div class="bg-slate-800 p-8 rounded-xl shadow-lg">
-                        <div class="text-6xl mb-4">🤝</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-2">繋がるコミュニティ</h3>
-                        <p class="text-slate-300">「ただいま」と帰りたくなる場所。音楽好きの、もう一つの我が家がここにあります。</p>
-                    </div>
-                    <div class="bg-slate-800 p-8 rounded-xl shadow-lg">
-                        <div class="text-6xl mb-4">📍</div>
-                        <h3 class="text-2xl font-bold gradient-text mb-2">駅直結の隠れ家</h3>
-                        <p class="text-slate-300">今池駅すぐの好立地。雨の日も安心。終電ぎりぎりまで、夜を深めよう。</p>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <footer class="text-center mt-20 py-10 border-t border-slate-700">
-            <h3 class="text-2xl font-bold">カラオケバー うたけん</h3>
-            <p class="text-slate-400 mt-2">名古屋市千種区今池 X-X-X  XXXビル B1F</p>
-            <p class="text-slate-400">名古屋市営地下鉄東山線・桜通線 今池駅 直結</p>
-            <div class="mt-4 text-pink-400">
-                <a href="#" class="hover:underline">Instagram</a>
-                <span class="mx-2">/</span>
-                <a href="#" class="hover:underline">X (Twitter)</a>
-            </div>
-        </footer>
-
-    </div>
-
+  <head>
+    <meta charset="utf-8">
+    <title>HOME｜うたけん</title>
+    <meta name="description" content="今池の地下に潜む、音楽好きの隠れ家。">
+    <link rel="icon" href="/assets/img/meta/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="/assets/img/meta/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="うたけん">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1,maximum-scale=5,minimum-scale=1">
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const ctx = document.getElementById('audienceChart').getContext('2d');
-            const audienceChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['40代以上', '20代〜30代', '大学生'],
-                    datasets: [{
-                        label: '客層',
-                        data: [50, 30, 20],
-                        backgroundColor: [
-                            '#a78bfa', // purple-400
-                            '#ec4899', // pink-500
-                            '#f472b6'  // pink-400
-                        ],
-                        borderColor: '#1a202c',
-                        borderWidth: 4,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#e2e8f0',
-                                font: {
-                                    size: 14,
-                                    family: "'Noto Sans JP', sans-serif"
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                title: function(tooltipItems) {
-                                    const item = tooltipItems[0];
-                                    let label = item.chart.data.labels[item.dataIndex];
-                                    if (Array.isArray(label)) {
-                                      return label.join(' ');
-                                    } else {
-                                      return label;
-                                    }
-                                }
-                            },
-                             bodyFont: {
-                                size: 14,
-                                family: "'Noto Sans JP', sans-serif"
-                            },
-                            titleFont: {
-                                size: 16,
-                                family: "'Noto Sans JP', sans-serif"
-                            },
-                            padding: 12
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-        });
+      // https://github.com/dsktschy/viewport-extra/blob/master/LICENSE.txt
+      !function(t,i){"function"==typeof define&&define.amd?define([],i):"object"==typeof module&&module.exports?module.exports=i():t.ViewportExtra=i()}("undefined"!=typeof self?self:this,function(){"use strict";var t;return(t=function(t){if(this.minWidth=this.maxWidth=null,"number"==typeof t)this.minWidth=t;else{if("object"!=typeof t)throw new Error("ViewportExtra requires an argument that is number or object");if("number"==typeof t.minWidth&&(this.minWidth=t.minWidth),"number"==typeof t.maxWidth&&(this.maxWidth=t.maxWidth),"number"==typeof this.minWidth&&"number"==typeof this.maxWidth&&this.minWidth>this.maxWidth)throw new Error("ViewportExtra requires that maxWidth is not less than minWidth")}this.applyToElement()}).prototype.applyToElement=function(){if("undefined"!=typeof window){var i=t.createContent(this,window);i&&t.element.setAttribute("content",i)}},t.createContent=function(t,i){var e,n,r;return e=n="",r=[],null!=t.minWidth&&t.minWidth===t.maxWidth?(e="width="+t.minWidth,n="initial-scale="+i.innerWidth/t.minWidth):null!=t.minWidth&&i.innerWidth<t.minWidth?(e="width="+t.minWidth,n="initial-scale="+i.innerWidth/t.minWidth):null!=t.maxWidth&&i.innerWidth>t.maxWidth&&(e="width="+t.maxWidth,n="initial-scale="+i.innerWidth/t.maxWidth),[e,n].forEach(function(t){t&&r.push(t)}),r.join(",")},t.createElement=function(){var t=document.createElement("meta");return t.setAttribute("name","viewport"),t.setAttribute("content","width=device-width,initial-scale=1"),document.head.insertBefore(t,null),t},t.element="undefined"==typeof window?null:document.querySelector('[name="viewport"]')||t.createElement(),t});
+      ;(function(){var a=navigator.userAgent;var c=a.indexOf("iPhone")>-1||(a.indexOf("Android")>-1&&a.indexOf("Mobile")>-1);var b=!c&&(a.indexOf("iPad")>-1||(a.indexOf("Macintosh")>-1&&"ontouchend" in document)||a.indexOf("Android")>-1);if(b){new ViewportExtra(1180)}})();
+      window.isCompleteEirDom = false;
+      window.onCompleteEirDom = function () {
+        window.isCompleteEirDom = true;
+      };
+      
     </script>
-</body>
+    <meta property="og:title" content="HOME">
+    <meta property="og:site_name" content="うたけん">
+    <meta property="og:description" content="今池の地下に潜む、音楽好きの隠れ家。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="undefined/">
+    <meta property="og:image" content="undefined/assets/img/common/ogp.jpg">
+    <link rel="canonical" href="undefined/">
+    <meta name="twitter:card" content="summary">
+    <link rel="stylesheet" href="/assets/css/main.css?1750936407508">
+    <link rel="stylesheet" href="/assets/css/index.css?1750936407508">
+    <script src="/assets/js/vendor.js?1750936407508" defer></script>
+    <script src="/assets/js/main.js?1750936407508" defer></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebPage","url": "undefined/","name": "HOME"},{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem","position": "1","name": "HOME","item": "undefined"}]}]}</script>
+  </head>
+  <body>
+    <div class="l-default" data-layout="default" data-barba="wrapper">
+      <header class="l-theHeader l-default-header" data-the-header="root">
+        <div class="l-theHeader-inner"><a class="logo" href="/">
+            <picture class="c-imagePicture" data-image-picture="root"><img class="c-imagePicture-img" src="/assets/img/common/1x/logo-color.webp" width="199" height="224" alt="うたけん" data-image-picture="img">
+            </picture></a>
+          <nav class="l-theHeader-nav">
+            <ul class="l-theHeader-nav-list">
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#top">PAGE TOP</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#system">SYSTEM</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#info">INFO</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#sound">SOUND</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#access">ACCESS</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#gallery">GALLERY</a></li>
+              <li class="l-theHeader-nav-list-item"><a class="l-theHeader-nav-list-item-link" href="#music">MUSIC</a></li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <div class="l-default-container" data-barba="container" data-barba-namespace="default">
+        <div class="l-default-page">
+          <main class="p-index" data-page="index">
+            <section class="p-pageIndexSectionKv" data-page-index-section-kv="root">
+              <div class="p-pageIndexSectionKv-inner">
+                <hgroup class="p-pageIndexSectionKv-title">
+                  <h1 class="title"><span class="title-item">今池地下に潜む、</span><span class="title-item">音楽好きの</span><span class="title-item">隠れ家。</span>
+                  </h1>
+                </hgroup>
+              </div>
+            </section>
+            <div class="p-index-inner">
+              <div class="p-index-section">
+                <p class="p-index-copy" data-scroll-motion="item" data-scroll-motion-type="fade">今池駅直結の、カラオケバー。<br>会話やドリンクを楽しみながら<br>お過ごしいただけます。<br>また団体利用の貸し出しも行なっておりますので、<br>2次会・パーティーでのご利用も可能です。<br>ご希望の方は是非スタッフにご相談ください。</p>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+      <footer class="l-theFooter l-default-footer" data-the-footer="root">
+        <div class="l-theFooter-inner">
+          <div class="l-theFooter-logo">
+            <picture class="c-imagePicture" data-image-picture="root"><img class="c-imagePicture-img" src="/assets/img/common/1x/logo-white.webp" width="84" height="90" alt="今池 うたけん" data-image-picture="img">
+            </picture>
+          </div>
+          <ul class="l-theFooter-info">
+            <li class="l-theFooter-info-item">
+              <p class="l-theFooter-info-item-label">住所</p>
+              <p class="l-theFooter-info-item-value">愛知県名古屋市千種区今池1-8-5&lt;br&gt;今池ターミナルビルF1</p>
+            </li>
+            <li class="l-theFooter-info-item">
+              <p class="l-theFooter-info-item-label">TEL</p>
+              <p class="l-theFooter-info-item-value">xxx-xxxx-xxxx</p>
+            </li>
+          </ul><small class="l-theFooter-copyright">&copy; 2025 日本歌声研究所 All rights reserved.</small>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>
