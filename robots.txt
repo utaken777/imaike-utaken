@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# サイトマップの場所を指定
+Sitemap: https://utaken777.github.io/imaike-utaken/sitemap.xml
+
+# クロール禁止パス（必要に応じて調整）
+Disallow: /assets/js/
+Disallow: /assets/css/
+Disallow: /*.scss$
+Disallow: /*.js$
+
+# 検索エンジンに重要でないファイルタイプを除外
+Disallow: /*.zip$
+Disallow: /*.pdf$
+Disallow: /*.doc$
+Disallow: /*.docx$
